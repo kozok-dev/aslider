@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width">
+<meta charset="utf-8">
+<title>aslider - 動作例</title>
+<link rel="stylesheet" href="style.css">
+<style>
+#slider {
+	width: 95%;
+	max-width: 800px;
+	height: 150px;
+	border: 1px solid #55a;
+	margin: 0 auto;
+	overflow: hidden;
+	box-shadow: 0px 0px 2px 2px rgba(0, 0, 0, 0.5);
+}
+#slider ul {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	_width: 999999px !important;	/* IE6対策 */
+}
+#slider li {
+	margin: 0px 5px;
+	padding: 0;
+	border: 1px solid #55a;
+	float: left;
+}
+
+#move_mark {
+	margin-top: 5px;
+}
+#move_mark a {
+	color: #666;
+	font-size: 20px;
+	font-weight: bold;
+	text-decoration: none;
+}
+#move_mark a.active, #move_mark a:hover {
+	color: #333;
+}
+
+#slider_link {
+	margin-top: 5px;
+}
+#slider_link a {
+	font-size: 20pt;
+	margin: 0 10px;
+}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="jquery.aslider.min.js"></script>
+<script>
+$(function () {
+	var aslider = $("#slider").aslider({
+		moveStep: function () {
+			// アニメーション中でも丸印のclassを変更
+			changeActive();
+		}
+	});
+
+	// 常時動くタイプのスライドアニメーションを実行
+	aslider.slide(2000);
+
+	// 「＜＜」リンク
+	$("#move_back_fast").click(function () {
+		aslider.stop();
+		aslider.slide(-500);
+		return false;
+	});
+	// 「＜」リンク
+	$("#move_back").click(function () {
+		aslider.stop();
+		aslider.slide(-2000);
+		return false;
+	});
+	// 「停止」リンク
+	$("#move_stop").click(function () {
+		aslider.stop();
+		return false;
+	});
+	// 「＞」リンク
+	$("#move_next").click(function () {
+		aslider.stop();
+		aslider.slide(2000);
+		return false;
+	});
+	// 「＜＜」リンク
+	$("#move_next_fast").click(function () {
+		aslider.stop();
+		aslider.slide(500);
+		return false;
+	});
+
+	// スライドの各要素リンク
+	$("#slider li a").click(function() {
+		aslider.moveByElem($(this).parent());
+		return false;
+	});
+
+	// 丸印リンク
+	$(".move").click(function () {
+		var index = $(".move:visible").index(this);
+		if (index < 0) return false;
+
+		aslider.moveByIndex(index);
+		return false;
+	});
+
+	// 選択した丸印のclassを変更
+	function changeActive() {
+		var index = aslider.getPos().index;
+		$(".move").removeClass("active");
+		$(".move:visible").eq(index).addClass("active");
+	}
+
+	// スライド幅が固定ではないので変化したときに更新します
+	$(window).resize(function () {
+		aslider.init();
+	});
+
+});
+</script>
+</head>
+
+<body>
+<div id="header">
+	<div id="header_sub">
+		<div id="title" class="center">aslider</div>
+		<div id="title_sub"></div>
+	</div>
+</div>
+
+<div id="content">
+	<div class="content_sub center">
+		<h3>常時アニメーション</h3>
+		<div id="slider">
+			<ul>
+				<li><a href="#"><img src="img1.jpg" width="133" height="100"></a></li>
+				<li><a href="#"><img src="img2.jpg" width="133" height="100"></a></li>
+				<li><a href="#"><img src="img3.jpg" width="133" height="100"></a></li>
+				<li><a href="#"><img src="img4.jpg" width="133" height="100"></a></li>
+				<li><a href="#"><img src="img5.jpg" width="133" height="100"></a></li>
+				<li><a href="#"><img src="img6.jpg" width="133" height="100"></a></li>
+				<li><a href="#"><img src="img7.jpg" width="133" height="100"></a></li>
+				<li><a href="#"><img src="img8.jpg" width="133" height="100"></a></li>
+				<li><a href="#"><img src="img9.jpg" width="133" height="100"></a></li>
+			</ul>
+		</div>
+		<div id="move_mark">
+			<a class="move" href="#">●</a>
+			<a class="move" href="#">●</a>
+			<a class="move" href="#">●</a>
+			<a class="move" href="#">●</a>
+			<a class="move" href="#">●</a>
+			<a class="move" href="#">●</a>
+			<a class="move" href="#">●</a>
+			<a class="move" href="#">●</a>
+			<a class="move" href="#">●</a>
+		</div>
+		<div id="slider_link">
+			<a id="move_back_fast" href="#">＜＜</a>
+			<a id="move_back" href="#">＜</a>
+			<a id="move_stop" href="#">停止</a>
+			<a id="move_next" href="#">＞</a>
+			<a id="move_next_fast" href="#">＞＞</a>
+		</div>
+
+		<div id="pad"></div>
+	</div>
+</div>
+</body>
+</html>

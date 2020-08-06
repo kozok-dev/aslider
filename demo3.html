@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width">
+<meta charset="utf-8">
+<title>aslider - 動作例</title>
+<link rel="stylesheet" href="style.css">
+<style>
+.slider {
+	width: 95%;
+	max-width: 800px;
+	height: 112px;
+	border: 1px solid #55a;
+	margin: 0 auto;
+	position: relative;
+	overflow: hidden;
+	box-shadow: 0px 0px 2px 2px rgba(0, 0, 0, 0.5);
+}
+#slider2 {
+	height: 150px;
+}
+.slider ul {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	z-index: 1;
+	_width: 999999px !important;	/* IE6対策 */
+}
+.slider li {
+	margin: 5px 0 0 5px;
+	padding: 0;
+	position: relative;
+	border: 1px solid #55a;
+	float: left;
+}
+
+.sel {
+	background-color: #338;
+	width: 145px;
+	height: 112px;
+	position: absolute;
+	left: 0;
+	top: 0;
+}
+#slider2 .sel {
+	left: 140px;
+	top: 22px;
+}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="jquery.aslider.min.js"></script>
+<script>
+$(function () {
+	var aslider1 = $("#slider1").aslider({
+		// スライド枠からの位置オフセット
+		offset: {left: 0, top: 0}
+		// 各要素からの位置オフセット
+		, elem_offset: {left: 0, top: 0}
+	});
+
+	var aslider2 = $("#slider2").aslider({
+		offset: {left: 0, top: 0.5}
+		, elem_offset: {left: 1, top: -0.5}
+	});
+
+	// スライドの各要素リンク
+	$("#slider1 li a").click(function() {
+		aslider1.moveByElem($(this).parent(), 1000);
+		return false;
+	});
+
+	// スライドの各要素リンク
+	$("#slider2 li a").click(function() {
+		aslider2.moveByElem($(this).parent(), 400, "linear");
+		return false;
+	});
+
+	// スライド幅が固定ではないので変化したときに更新します
+	$(window).resize(function () {
+		aslider1.init();
+		aslider2.init();
+	});
+
+});
+</script>
+</head>
+
+<body>
+<div id="header">
+	<div id="header_sub">
+		<div id="title" class="center">aslider</div>
+		<div id="title_sub"></div>
+	</div>
+</div>
+
+<div id="content">
+	<div class="content_sub center">
+		<h3>異なる表示位置</h3>
+		<div id="slider1" class="slider">
+			<ul>
+				<li style="top: -10px;"><a href="#"><img src="img1.jpg" width="133" height="100"></a></li>
+				<li style="top: 10px;"><a href="#"><img src="img2.jpg" width="133" height="100"></a></li>
+				<li style="top: -10px;"><a href="#"><img src="img3.jpg" width="133" height="100"></a></li>
+				<li style="top: -20px;"><a href="#"><img src="img4.jpg" width="133" height="100"></a></li>
+				<li style="top: -10px;"><a href="#"><img src="img5.jpg" width="133" height="100"></a></li>
+				<li><a href="#"><img src="img6.jpg" width="133" height="100"></a></li>
+				<li style="top: 10px;"><a href="#"><img src="img7.jpg" width="133" height="100"></a></li>
+				<li style="top: 10px;"><a href="#"><img src="img8.jpg" width="133" height="100"></a></li>
+				<li style="top: 20px;"><a href="#"><img src="img9.jpg" width="133" height="100"></a></li>
+			</ul>
+			<div class="sel"></div>
+		</div>
+		<div id="pad"></div>
+
+		<div id="slider2" class="slider">
+			<ul>
+				<li><a href="#"><img src="img1.jpg" width="133" height="100"></a></li>
+				<li><a href="#"><img src="img2.jpg" width="133" height="100"></a></li>
+				<li style="top: 10px;"><a href="#"><img src="img3.jpg" width="133" height="100"></a></li>
+				<li><a href="#"><img src="img4.jpg" width="133" height="100"></a></li>
+				<li><a href="#"><img src="img5.jpg" width="133" height="100"></a></li>
+				<li><a href="#"><img src="img6.jpg" width="133" height="100"></a></li>
+				<li><a href="#"><img src="img7.jpg" width="133" height="100"></a></li>
+				<li><a href="#"><img src="img8.jpg" width="133" height="100"></a></li>
+				<li><a href="#"><img src="img9.jpg" width="133" height="100"></a></li>
+			</ul>
+			<div class="sel"></div>
+		</div>
+		<div id="pad"></div>
+	</div>
+</div>
+</body>
+</html>

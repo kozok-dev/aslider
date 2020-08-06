@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width">
+<meta charset="utf-8">
+<title>aslider - 動作例</title>
+<link rel="stylesheet" href="style.css">
+<style>
+#slider {
+	width: 95%;
+	max-width: 800px;
+	height: 200px;
+	border: 1px solid #55a;
+	margin: 0 auto;
+	overflow: hidden;
+	box-shadow: 0px 0px 2px 2px rgba(0, 0, 0, 0.5);
+}
+#slider ul {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	_width: 999999px !important;	/* IE6対策 */
+}
+#slider li {
+	margin: 0px 5px;
+	padding: 0;
+	border: 1px solid #55a;
+	float: left;
+}
+
+#move_mark {
+	margin-top: 5px;
+}
+#move_mark a {
+	color: #666;
+	font-size: 20px;
+	font-weight: bold;
+	text-decoration: none;
+}
+#move_mark a.active, #move_mark a:hover {
+	color: #333;
+}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="jquery.aslider.min.js"></script>
+
+<!--
+外部プラグインtouchSwipeを読み込みます
+http://labs.rampinteractive.co.uk/touchSwipe/demos/
+-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.touchswipe/1.6.19/jquery.touchSwipe.min.js"></script>
+
+<script>
+$(function () {
+	var aslider = $("#slider").aslider({
+		moveStep: function () {
+			// アニメーション中でも丸印のclassを変更
+			changeActive();
+		}
+	});
+
+	// 初期位置の丸印をactiveにする
+	changeActive();
+
+	// スワイプ機能設定
+	var move_swipe, move_swipe_before, duration_before = 0, swipe_timer = null;
+	$("#slider").swipe({
+		allowPageScroll: "vertical"	// 横向きスライドなので縦スクロールは効くようにしておく
+		, excludedElements: ""
+		, fallbackToMouseEvents: true	// falseにするとマウスでシミュレートしなくなる
+		, swipeStatus: function (event, phase, direction, distance, duration, fingerCount) {
+			switch (phase) {
+			// スワイプ開始
+			case "start":
+				clearInterval(swipe_timer);
+
+				// 移動量計算のための準備
+				move_swipe = move_swipe_before = 0;
+				duration_before = 0;
+
+				break;
+
+			// スワイプ中
+			case "move":
+				// 移動量計算
+				if (direction == "left") {
+					move_swipe = distance - move_swipe_before;
+					move_swipe_before = distance;
+				} else if (direction == "right") {
+					move_swipe = -distance - move_swipe_before;
+					move_swipe_before = -distance;
+				}
+				duration_before = duration;
+
+				// スライドさせる(第2引数に0を指定することで即移動する)
+				// 要素のサイズ(今回の場合は145)で割った値であればスワイプの移動量とスライドの移動量を同一にできる
+				aslider.move(move_swipe / 145, 0);
+
+				break;
+
+			// スワイプ終了
+			default:
+				// ホールドしている場合を考慮して、徐々に遅くするための値を小さくする
+				duration -= duration_before;
+				if (duration > 10) move_swipe /= duration * 0.1;
+
+				setTimeout(function () {
+					duration_before = 0;
+				}, 0);
+
+				// 徐々に遅くする
+				swipe_timer = setInterval(function () {
+					if (move_swipe <= 3 && move_swipe >= -3) {
+						clearInterval(swipe_timer);
+
+						// ある程度遅くなったら位置を整えるため、通常のmoveメソッドを実行して終わる
+						if (move_swipe < 0) {
+							aslider.move(-aslider.getPos(-1).point, 400, "linear");
+						} else if (move_swipe > 0) {
+							aslider.move(1 - aslider.getPos(1).point, 400, "linear");
+						}
+					} else {
+						aslider.move(move_swipe / 100, 0);
+						move_swipe /= 1.1;
+					}
+				}, 20);
+
+				break;
+			}
+		}
+	});
+
+	// スライドの各要素リンク
+	$("#slider li a").click(function() {
+		if (duration_before != 0) return false;	// スワイプ時は実行しないようにする
+
+		var move = aslider.moveByElem($(this).parent());
+		return false;
+	});
+
+	// 丸印リンク
+	$(".move").click(function () {
+		var index = $(".move:visible").index(this);
+		if (index < 0) return false;
+
+		var move = aslider.moveByIndex(index);
+		return false;
+	});
+
+	// 選択した丸印のclassを変更
+	function changeActive(move) {
+		var index = aslider.getPos(move).index;
+		$(".move").removeClass("active");
+		$(".move:visible").eq(index).addClass("active");
+	}
+
+	// スライド幅が固定ではないので変化したときに更新します
+	$(window).resize(function () {
+		aslider.init();
+	});
+
+});
+</script>
+</head>
+
+<body>
+<div id="header">
+	<div id="header_sub">
+		<div id="title" class="center">aslider</div>
+		<div id="title_sub"></div>
+	</div>
+</div>
+
+<div id="content">
+	<div class="content_sub center">
+		<h3>スワイプ(touchSwipeと組み合わせ)</h3>
+		<div id="slider">
+			<ul>
+				<li><a href="#"><img src="img1.jpg" width="133" height="100"></a></li>
+				<li><a href="#"><img src="img2.jpg" width="133" height="100"></a></li>
+				<li><a href="#"><img src="img3.jpg" width="133" height="100"></a></li>
+				<li><a href="#"><img src="img4.jpg" width="133" height="100"></a></li>
+				<li><a href="#"><img src="img5.jpg" width="133" height="100"></a></li>
+				<li><a href="#"><img src="img6.jpg" width="133" height="100"></a></li>
+				<li><a href="#"><img src="img7.jpg" width="133" height="100"></a></li>
+				<li><a href="#"><img src="img8.jpg" width="133" height="100"></a></li>
+				<li><a href="#"><img src="img9.jpg" width="133" height="100"></a></li>
+			</ul>
+		</div>
+		<div id="move_mark">
+			<a class="move" href="#">●</a>
+			<a class="move" href="#">●</a>
+			<a class="move" href="#">●</a>
+			<a class="move" href="#">●</a>
+			<a class="move" href="#">●</a>
+			<a class="move" href="#">●</a>
+			<a class="move" href="#">●</a>
+			<a class="move" href="#">●</a>
+			<a class="move" href="#">●</a>
+		</div>
+
+		<div id="pad"></div>
+	</div>
+</div>
+</body>
+</html>

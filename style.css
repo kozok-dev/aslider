@@ -1,0 +1,243 @@
+@charset "utf-8";
+
+body {
+	color: #000;
+	background-color: #f6f6ff;
+	font-size: 18px;
+	font-family: sans-serif;
+	letter-spacing: 0.05em;
+}
+body, h1, h2 {
+	margin: 0;
+	padding: 0;
+}
+h1 {
+	color: #008;
+	font-size: 20px;
+	margin: 0 0 10px 0;
+	border-bottom: 1px solid #000;
+}
+h2 {
+	color: #333;
+	font-size: 16px;
+	margin: 10px 0;
+}
+h3 {
+	color: #333;
+	font-size: 20px;
+	font-weight: normal;
+	margin: 0 0 10px 0;
+}
+a {
+	font-size: 18px;
+	color: #33f;
+}
+a:hover {
+	color: #383;
+}
+a:hover img {
+	opacity: 0.8;
+	filter: alpha(opacity=80);
+}
+img {
+	background-color: #fff;
+	vertical-align: middle;
+	border: none;
+}
+
+#header, #content {
+	width: 100%;
+	min-width: 800px;
+}
+#header_sub {
+	padding: 10px 15%;
+	border-bottom: 1px solid #55a;
+}
+#title {
+	font-size: 30px;
+	text-align: center;
+	text-shadow: 1px 1px 3px;
+	letter-spacing: 0.1em;
+	line-height: 1em;
+	float: left;
+}
+#title.center {
+	float: none;
+}
+#title_sub {
+	color: #555;
+	font-size: 14px;
+	font-weight: bold;
+	clear: both;
+	display: block;
+}
+#header_button {
+	position: relative;
+	float: right;
+}
+#header_button_sub {
+	position: absolute;
+	top: -3px;
+	right: 0;
+}
+#header_button_sub div {
+	margin: 0 0 3px 5px;
+	float: left;
+}
+#header_button_sub div a {
+	width: 60px;
+	color: #fff;
+	background-color: #55a;
+	font-size: 16px;
+	font-weight: bold;
+	text-align: center;
+	text-decoration: none;
+	padding: 0 5px;
+	border: 1px solid #55a;
+	border-radius: 5px;
+	display: inline-block;
+}
+#header_button_sub div a:hover {
+	background-color: #5a5;
+	text-decoration: underline;
+	border-color: #5a5;
+}
+#header_button_sub div#download a {
+	width: 137px;
+}
+
+#content {
+	border-bottom: 1px solid #55a;
+}
+.content_sub {
+	background-color: #fff;
+	padding: 10px 15%;
+}
+.center {
+	text-align: center;
+}
+ul.feature {
+	padding: 0;
+	margin: 0 1em;
+}
+ol.feature {
+	padding: 0;
+	margin: 0 1.5em;
+}
+.document {
+	font-size: 14px;
+	padding: 5px 0;
+	margin: 10px 0;
+	border-top: 1px solid #555;
+}
+.document_last {
+	font-size: 14px;
+	padding: 5px 0;
+	margin: 10px 0 30px 0;
+	border-top: 1px solid #555;
+	border-bottom: 1px solid #555;
+}
+.property {
+	color: #555;
+	font-size: 14px;
+	margin-bottom: 3px;
+}
+.property .name {
+	color: #225;
+	font-size: 16px;
+	font-weight: bold;
+}
+.property .arg {
+	color: #000;
+}
+.property .type {
+	color: #888;
+}
+.code {
+	background-color: #f7f7f7;
+	font-size: 12px;
+	white-space: nowrap;
+	padding: 10px;
+	margin: 5px 0;
+	position: relative;
+	border: 1px dashed #888;
+	overflow: hidden;
+}
+.code:before {
+	content: "コード例";
+	color: #888;
+	position: absolute;
+	top: 0px;
+	right: 0px;
+	margin: 5px;
+}
+.op {
+	color: #00f;
+}
+.quote {
+	color: #f0f;
+}
+.comment {
+	color: #080;
+}
+#pad {
+	height: 20px;
+}
+
+
+@media screen and (max-width: 815px) {
+
+body {
+	font-size: 13px;
+	letter-spacing: normal;
+}
+h1 {
+	font-size: 18px;
+}
+
+#header, #content {
+	min-width: 0;
+}
+#header_sub {
+	padding: 10px 1%;
+}
+#header_button {
+	margin-top: 10px;
+	position: static;
+	overflow: hidden;
+	float: none;
+}
+#header_button_sub {
+	width: 154px;
+	height: 1em;
+	position: relative;
+	top: 0;
+	left: 50%;
+	right: auto;
+	margin-bottom: 5px;
+}
+#header_button_sub div {
+	margin: 0 10px 0 0;
+	position: relative;
+	left: -50%;
+	float: left;
+}
+#header_button_sub div#download {
+	display: none;
+}
+#header_button_sub div:last-child {
+	margin-right: 0px;
+}
+#title {
+	font-size: 25px;
+	float: none;
+}
+#title_sub {
+	display: none;
+}
+
+.content_sub {
+	padding: 10px 1%;
+}
+
+}

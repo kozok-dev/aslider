@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width">
+<meta charset="utf-8">
+<title>aslider - 動作例</title>
+<link rel="stylesheet" href="style.css">
+<style>
+#image_area {
+	width: 509px;
+	margin: 0 auto;
+}
+#image {
+	width: 350px;
+	height: 300px;
+	border-top: 2px solid #55a;
+	border-bottom: 2px solid #55a;
+	border-left: 2px solid #55a;
+	position: relative;
+	overflow: hidden;
+	float: left;
+}
+#image img {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	display: none;
+}
+
+@media screen and (max-width: 550px) {
+#image_area {
+	width: auto;
+}
+#image {
+	display: none;
+}
+#slider {
+	margin: 0 auto;
+}
+}
+
+#slider {
+	width: 150px;
+	height: 300px;
+	border: 2px solid #55a;
+	overflow: hidden;
+}
+#slider ul {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+#slider li {
+	margin: 5px 0;
+	padding: 0;
+	border: 1px solid #55a;
+	float: left;
+}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="jquery.aslider.min.js"></script>
+<script>
+$(function () {
+	var aslider = $("#slider").aslider({
+		vertical: true	// 縦向きにする
+	});
+
+	$("#image img").eq(0).show();
+
+	// スライドの各要素リンク
+	$("#slider li a").click(function() {
+		var move = aslider.moveByElem($(this).parent());
+		changeImage(move);
+		return false;
+	});
+
+	// 画像(大)の変更
+	var last_index = null;
+	function changeImage(move) {
+		var index = aslider.getPos(move).index;
+		last_index = index;
+
+		$("#image img").stop().eq(index).css({zIndex: 1}).fadeIn(function () {
+			if (last_index != index) return;
+
+			$("#image img").not(":eq(" + index + ")").hide();
+			$("#image img").css({zIndex: 0});
+		});
+	}
+
+});
+</script>
+</head>
+
+<body>
+<div id="header">
+	<div id="header_sub">
+		<div id="title" class="center">aslider</div>
+		<div id="title_sub"></div>
+	</div>
+</div>
+
+<div id="content">
+	<div class="content_sub center">
+		<h3>縦向き</h3>
+		<div id="image_area">
+			<div id="image">
+				<img src="img1.jpg">
+				<img src="img2.jpg">
+				<img src="img3.jpg">
+				<img src="img4.jpg">
+				<img src="img5.jpg">
+				<img src="img6.jpg">
+				<img src="img7.jpg">
+				<img src="img8.jpg">
+				<img src="img9.jpg">
+			</div>
+			<div id="slider">
+				<ul>
+					<li><a href="#"><img src="img1.jpg" width="133" height="100"></a></li>
+					<li><a href="#"><img src="img2.jpg" width="133" height="100"></a></li>
+					<li><a href="#"><img src="img3.jpg" width="133" height="100"></a></li>
+					<li><a href="#"><img src="img4.jpg" width="133" height="100"></a></li>
+					<li><a href="#"><img src="img5.jpg" width="133" height="100"></a></li>
+					<li><a href="#"><img src="img6.jpg" width="133" height="100"></a></li>
+					<li><a href="#"><img src="img7.jpg" width="133" height="100"></a></li>
+					<li><a href="#"><img src="img8.jpg" width="133" height="100"></a></li>
+					<li><a href="#"><img src="img9.jpg" width="133" height="100"></a></li>
+				</ul>
+			</div>
+		</div>
+
+		<div id="pad"></div>
+	</div>
+</div>
+</body>
+</html>

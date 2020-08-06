@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width">
+<meta charset="utf-8">
+<title>aslider - jQuery content slider plugin</title>
+<link rel="stylesheet" href="style.css">
+<style>
+#slider {
+	width: 95%;
+	max-width: 800px;
+	height: 200px;
+	border: 1px solid #55a;
+	margin: 0 auto;
+	overflow: hidden;
+	box-shadow: 0px 0px 2px 2px rgba(0, 0, 0, 0.5);
+}
+#slider ul {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	_width: 999999px !important;
+}
+#slider li {
+	margin: 0 5px;
+	padding: 0;
+	border: 1px solid #55a;
+	float: left;
+}
+
+.slider_link {
+	width: 95%;
+	max-width: 500px;
+	font-size: 20px;
+	position: relative;
+	margin: 7px auto 0 auto;
+}
+.slider_link a {
+	color: #666;
+	font-size: 20px;
+	font-weight: bold;
+	text-decoration: none;
+}
+.slider_link a:hover, .slider_link a.active {
+	color: #333;
+}
+#move_back {
+	position: absolute;
+	left: 0;
+	top: 0;
+}
+#move_next {
+	position: absolute;
+	right: 0;
+	top: 0;
+}
+.slider_link2 {
+	margin: 0 auto;
+}
+.slider_link2 a {
+	margin: 0 10px;
+}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.touchswipe/1.6.19/jquery.touchSwipe.min.js"></script>
+<script src="jquery.aslider.min.js"></script>
+<script>
+$(function () {
+	var aslider = $("#slider").aslider({
+		moveStep: function () {
+			changeActive();
+		}
+	});
+	changeActive();
+
+	$("#move_back").click(function () {
+		aslider.move(-1);
+		return false;
+	});
+
+	$("#move_next").click(function () {
+		aslider.move(1);
+		return false;
+	});
+
+	$("#slider li a").click(function () {
+		aslider.moveByElem($(this).parent());
+		return false;
+	});
+
+	$(".move").click(function () {
+		var index = $(".move:visible").index(this);
+		if (index < 0) return false;
+
+		aslider.moveByIndex(index);
+		return false;
+	});
+
+	$("#slide_back").click(function () {
+		aslider.slide(-1000);
+		return false;
+	});
+
+	$("#slide_next").click(function () {
+		aslider.slide(1000);
+		return false;
+	});
+
+	$("#slide_stop").click(function () {
+		aslider.stop();
+		return false;
+	});
+
+	$("#slider").swipe({
+		allowPageScroll: "vertical"
+		, swipeStatus: function (event, phase, direction, distance, duration, fingerCount) {
+			if (phase == "start" || phase == "move") return;
+			if (direction == "left") {
+				aslider.move(1);
+			} else if (direction == "right") {
+				aslider.move(-1);
+			}
+		}
+	});
+
+	function changeActive() {
+		var index = aslider.getPos().index;
+		$(".move").removeClass("active");
+		$(".move:visible").eq(index).addClass("active");
+	}
+
+	$(window).resize(function () {
+		aslider.init();
+	});
+
+	$("a[href^='#']").click(function () {
+		var target = $($(this).attr("href"));
+		if (target.length == 0) return true;
+		$("html, body").stop().animate({scrollTop: target.offset().top});
+		return false;
+	});
+});
+</script>
+</head>
+
+<body>
+<div id="header">
+	<div id="header_sub">
+		<div id="title">aslider</div>
+		<div id="header_button">
+			<div id="header_button_sub">
+				<div id="download"><a href="jquery.aslider.min.js">download</a></div>
+				<div><a href="#demo">demo</a></div>
+				<div><a href="#docs">docs</a></div>
+			</div>
+		</div>
+		<div id="title_sub">API形式に特化したjQueryスライダープラグイン</div>
+	</div>
+</div>
+
+<div id="content">
+	<div class="content_sub center">
+		<div id="slider">
+			<ul>
+				<li><a href="#"><img src="img1.jpg" width="133" height="100"></a><br>1</li>
+				<li><a href="#"><img src="img2.jpg" width="133" height="100"></a><br>2</li>
+				<li><a href="#"><img src="img3.jpg" width="100" height="133"></a><br>3</li>
+				<li><a href="#"><img src="img4.jpg" width="133" height="100"></a><br>4</li>
+				<li><a href="#"><img src="img5.jpg" width="133" height="100"></a><br>5</li>
+				<li><a href="#"><img src="img6.jpg" width="133" height="100"></a><br>6</li>
+				<li style="position: relative; left: 5px; top: 10px;"><a href="#"><img src="img7.jpg" width="133" height="100"></a><br>7</li>
+				<li><a href="#"><img src="img8.jpg" width="133" height="100"></a><br>8</li>
+				<li><a href="#"><img src="img9.jpg" width="133" height="100"></a><br>9</li>
+			</ul>
+		</div>
+		<div class="slider_link">
+			<a class="move" href="#">●</a>
+			<a class="move" href="#">●</a>
+			<a class="move" href="#">●</a>
+			<a class="move" href="#">●</a>
+			<a class="move" href="#">●</a>
+			<a class="move" href="#">●</a>
+			<a class="move" href="#">●</a>
+			<a class="move" href="#">●</a>
+			<a class="move" href="#">●</a>
+			<a id="move_back" href="#">←</a>
+			<a id="move_next" href="#">→</a>
+		</div>
+		<div class="slider_link slider_link2">
+			<a id="slide_back" href="#">&lt;&lt;</a>
+			<a id="slide_stop" href="#">停止</a>
+			<a id="slide_next" href="#">&gt;&gt;</a>
+		</div>
+	</div>
+
+	<div class="content_sub">
+		<h1>特徴</h1>
+		<ul class="feature">
+			<li>API形式でアニメーションが可能。</li>
+			<li>API形式のため、スライドさせる矢印ボタンの設置、要素クリックによる動作等は各自自由に行える。</li>
+			<li>最小限のスタイル変更しか行わないので、作成済みのスタイルをそのまま適用可能。</li>
+			<li>スライドさせる画像等の要素のサイズがそれぞれ異なっていても、要素が並んでいなくても適用可能。</li>
+			<li>スライドを作成しても後からオプションを変更可能。</li>
+			<li>Chrome、Firefox、IE7+等のブラウザ、スマートフォンで動作。</li>
+		</ul>
+	</div>
+
+	<div id="demo" class="content_sub">
+		<h1>動作例</h1>
+		<ol class="feature">
+			<li><a href="demo1.html">基本</a></li>
+			<li><a href="demo2.html">縦向き</a></li>
+			<li><a href="demo3.html">異なる表示位置</a></li>
+			<li><a href="demo4.html">コールバック</a></li>
+			<li><a href="demo5.html">自動実行</a></li>
+			<li><a href="demo6.html">常時アニメーション</a></li>
+			<li><a href="demo7.html">動的実行</a></li>
+			<li><a href="demo8.html">遅延読み込み(lazyloadと組み合わせ)</a></li>
+			<li><a href="demo9.html">スワイプ(touchSwipeと組み合わせ)</a></li>
+		</ul>
+	</div>
+
+	<div id="docs" class="content_sub">
+		<h1>ドキュメント</h1>
+
+		<h2>使い方</h2>
+		<div class="document_last">
+			以下のように記述し、jQueryとasliderを読み込んで特定の要素をスライド化します。
+			<div class="code">
+				&lt;script src=<span class="quote">"(jQuery本体のパス)"</span>&gt;&lt;/script&gt;<br>
+				&lt;script src=<span class="quote">"jquery.aslider.min.js"</span>&gt;&lt;/script&gt;<br>
+				&lt;script&gt;<br>
+				$(<span class="op">function</span>() {<br>
+				&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// #sliderに対してスライド化を実行</span><br>
+				&nbsp;&nbsp;&nbsp;&nbsp;<span class="op">var</span> aslider1 = $(<span class="quote">"#slider"</span>).aslider();<br>
+				});<br>
+				&lt;/script&gt;<br>
+			</div>
+			上記のコードの場合、HTMLは以下のようにブロック要素で囲みます。
+			<div class="code">
+				&lt;div id=<span class="quote">"slider"</span>&gt;<br>
+				&nbsp;&nbsp;&nbsp;&nbsp;&lt;ul&gt;<br>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;li&gt;1つ目の要素&lt;/li&gt;<br>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;li&gt;2つ目の要素&lt;/li&gt;<br>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;li&gt;3つ目の要素&lt;/li&gt;<br>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;li style=<span class="quote">"display: none;"</span>&gt;隠し要素は無視されます&lt;/li&gt;<br>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;li&gt;4つ目の要素&lt;/li&gt;<br>
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;li&gt;5つ目の要素&lt;/li&gt;<br>
+				&nbsp;&nbsp;&nbsp;&nbsp;&lt;/ul&gt;<br>
+				&lt;/div&gt;<br>
+			</div>
+			asliderで指定した要素の子がスライドされることに注意してください。これは他のスライダープラグインの指定方法と異なっている場合があります。asliderで指定した要素自身は枠の役割りをします。
+		</div>
+
+		<h2>コンストラクター</h2>
+		<div class="document_last">
+			<div class="property"><span class="name">aslider</span> <span class="arg">(<span class="type">object</span> option)</span>: object</div>
+			指定した要素をスライド化し、各メソッドが実行できるobjectを返します。引数optionに下記オプションを指定できます(各オプションはそれぞれ省略可)。
+			<div class="code">
+				<span class="op">var</span> aslider1 = $(<span class="quote">"#slider"</span>).aslider();
+			</div>
+			<div class="code">
+				<span class="comment">// 縦方向</span><br>
+				<span class="op">var</span> aslider2 = $(<span class="quote">"#slider"</span>).aslider({<br>
+				&nbsp;&nbsp;&nbsp;&nbsp;vertical: <span class="op">true</span><br>
+				});
+			</div>
+			<br>
+			一度に指定できる要素は1つまでです。
+			<div class="code">
+				<span class="comment">// 1つ目の要素に対してのみスライド化されます</span><br>
+				<span class="comment">// つまり、.slidersの2つ目以降の要素と#sliderは無視されます</span><br>
+				<span class="op">var</span> aslider = $(<span class="quote">".sliders, #slider"</span>).aslider();<br>
+				<br>
+				<span class="comment">// それぞれの要素に対してスライド化させる場合は以下のようにします</span><br>
+				<span class="op">var</span> aslider1 = $(<span class="quote">".sliders"</span>).eq(0).aslider();<br>
+				<span class="op">var</span> aslider2 = $(<span class="quote">".sliders"</span>).eq(1).aslider();<br>
+				<span class="op">var</span> aslider3 = $(<span class="quote">"#slider"</span>).aslider();<br>
+			</div>
+			メソッドチェーンではありませんのでご注意ください。
+		</div>
+
+		<h2>オプション</h2>
+		<div class="document">
+			<div class="property"><span class="name">vertical</span>: boolean (default=false)</div>
+			アニメーションする方向が縦の場合、trueを指定します。
+		</div>
+		<div class="document">
+			<div class="property"><span class="name">offset</span>: object (default={left: 0.5, top: 0.5})</div>
+			スライド枠のサイズを1として、要素の位置オフセットを指定します。0.5で中央となります。
+		</div>
+		<div class="document">
+			<div class="property"><span class="name">elem_offset</span>: object (default={left: -0.5, top: -0.5})</div>
+			各要素のサイズを1として、要素の位置オフセットを指定します。0.5で中央となります。
+		</div>
+		<div class="document">
+			<div class="property"><span class="name">move_minimum</span>: boolean (default=false)</div>
+			移動量を最小にするか指定します。<br>
+			trueにするとmoveメソッドの引数move_posに大きな値を指定してもループしません。
+		</div>
+		<div class="document">
+			<div class="property"><span class="name">moveBefore</span>: function (default=function () {})</div>
+			アニメーション前に実行するコールバック関数を指定します。
+		</div>
+		<div class="document">
+			<div class="property"><span class="name">moveStep</span>: function (default=function (t) {})</div>
+			アニメーション中の毎フレーム実行するコールバック関数を指定します。<br>
+			引数tはアニメーション進行度(0～1)が設定されます。<br>
+			slideメソッドの場合は次の要素までの進行度となります。
+		</div>
+		<div class="document_last">
+			<div class="property"><span class="name">moveAfter</span>: function (default=function (succ) {})</div>
+			アニメーション後に実行するコールバック関数を指定します。<br>
+			引数succは正常終了ならtrueが設定されます。<br>
+			slideメソッドでは呼ばれません。
+		</div>
+
+		<h2>メソッド、プロパティ</h2>
+		<div class="document">
+			<div class="property"><span class="name">option</span></div>
+			上記オプションを参照できます。変更も可。
+		</div>
+		<div class="document">
+			<div class="property"><span class="name">init</span> <span class="arg">()</span></div>
+			初期化を行い、表示を更新します。<br>
+			スライド枠のサイズ(asliderで指定した要素)のサイズが変更された場合等に実行するとよいでしょう。
+		</div>
+		<div class="document">
+			<div class="property"><span class="name">move</span> <span class="arg">(<span class="type">float</span> move_pos, <span class="type">mixed</span> duration, <span class="type">string</span> easing)</span> : float</div>
+			アニメーションを実行し、移動数を返します。小数点含めて指定できます。例えば1.5と指定すると1.5個分動きます。<br>
+			引数move_posに移動する数を指定します。右または下に移動するには正の値、左または上に移動するには負の値を指定します。<br>
+			引数duration、easingはjQueryと同様の方法で指定できます。<br>
+			既にアニメーション中の場合、そのアニメーションを停止させてから実行します。
+		</div>
+		<div class="document">
+			<div class="property"><span class="name">moveByIndex</span> <span class="arg">(<span class="type">integer</span> index, <span class="type">mixed</span> duration, <span class="type">string</span> easing)</span> : float</div>
+			アニメーションを実行し、移動数を返します。<br>
+			動かす数は引数indexで指定した要素インデックスにより決定されます。<br>
+			内部ではmoveメソッドが呼ばれます。
+		</div>
+		<div class="document">
+			<div class="property"><span class="name">moveByElem</span> <span class="arg">(<span class="type">object</span> elem, <span class="type">mixed</span> duration, <span class="type">string</span> easing)</span> : float</div>
+			アニメーションを実行し、移動数を返します。<br>
+			動かす数は引数elemで指定した要素により決定されます。引数elemはスライド化した要素である必要があります。<br>
+			内部ではmoveメソッドが呼ばれます。
+		</div>
+		<div class="document">
+			<div class="property"><span class="name">slide</span> <span class="arg">(<span class="type">integer</span> duration)</span></div>
+			常時動くタイプのスライドアニメーションを実行します。<br>
+			要素1つ分の移動量を引数durationで指定します。右または下に移動するには正の値、左または上に移動するには負の値を指定します。<br>
+			既にアニメーション中の場合、そのアニメーションを停止させてから実行します。
+		</div>
+		<div class="document">
+			<div class="property"><span class="name">stop</span> <span class="arg">()</span></div>
+			アニメーションを停止します。
+		</div>
+		<div class="document">
+			<div class="property"><span class="name">isAnim</span> <span class="arg">()</span> : boolean</div>
+			アニメーション中ならtrueを、停止状態ならfalseを返します。<br>
+		</div>
+		<div class="document">
+			<div class="property"><span class="name">count</span> <span class="arg">()</span> : integer</div>
+			要素の数を取得します。スライド枠が大きい等の理由でスライド化していない場合は0が返ります。
+		</div>
+		<div class="document">
+			<div class="property"><span class="name">getPos</span> <span class="arg">(<span class="type">integer</span> offset)</span> : object</div>
+			現在の位置情報を返します。<br>
+			<span class="op">index:</span> 要素インデックス<br>
+			<span class="op">point:</span> 次の要素までの進行度(0～1未満)<br>
+			<span class="op">over:</span> 内部で使用します。通常は用いません<br>
+			引数offsetを指定すると現在位置から引数offsetだけ動かした分のインデックスを返します。
+		</div>
+	</div>
+
+	<div class="content_sub">
+		<h1>制限等</h1>
+		<ul class="feature">
+			<li>スライドしなくてもすべての要素が表示されているほどスライド枠が大きい場合はスライド化されず、オプションのoffsetとelem_offsetのみ適用されます。</li>
+			<li>スライド枠が大きくてもスライド化させたい場合は、同じ要素を複数記述する等、スライド枠より大きくなるよう十分な数の要素を用意する必要があります。</li>
+			<li>要素に画像を含み、幅や高さが未指定の場合はwindow.onload等、画像の読み込み後に実行する必要があります。</li>
+			<li>要素の位置指定が絶対指定、または相対指定でも位置を大きな値にすると正しく動作しない場合があります。</li>
+		</ul>
+
+		<div id="pad"></div>
+	</div>
+</div>
+</body>
+</html>

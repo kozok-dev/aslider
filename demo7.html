@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width">
+<meta charset="utf-8">
+<title>aslider - 動作例</title>
+<link rel="stylesheet" href="style.css">
+<style>
+#slider {
+	width: 95%;
+	max-width: 800px;
+	height: 150px;
+	border: 1px solid #55a;
+	margin: 0 auto;
+	overflow: hidden;
+	box-shadow: 0px 0px 2px 2px rgba(0, 0, 0, 0.5);
+}
+#slider ul {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	display: none;
+	_width: 999999px !important;	/* IE6対策 */
+}
+#slider li {
+	margin: 10px 5px;
+	padding: 0;
+	border: 1px solid #55a;
+	float: left;
+}
+#step {
+	width: 100%;
+	position: absolute;
+	bottom: 0;
+	margin-bottom: 3px;
+}
+
+#move_mark {
+	margin-top: 5px;
+}
+#move_mark a {
+	color: #666;
+	font-size: 20px;
+	font-weight: bold;
+	text-decoration: none;
+}
+#move_mark a.active, #move_mark a:hover {
+	color: #333;
+}
+
+#slider_link {
+	margin: 10px 0;
+}
+#slider_link a {
+	font-size: 22px;
+	margin: 0 10px;
+}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="jquery.aslider.min.js"></script>
+<script>
+$(function () {
+	var aslider = null;
+
+	// デフォルトの状態で生成
+	$("#create1").click(function () {
+		$("#slider ul").show();
+		$("#slider ul li").show();
+		$(".move").show();
+
+		aslider = $("#slider").aslider({
+			offset: {left: 0.5, top: 0.5}
+			, elem_offset: {left: -0.5, top: -0.5}
+		});
+		aslider.moveByIndex(0, 0);
+
+		changeActive();	// 選択状態にする丸印も再設定
+		return false;
+	});
+
+	// 左上の位置にして生成
+	$("#create2").click(function () {
+		$("#slider ul").show();
+		$("#slider ul li").show();
+		$(".move").show();
+
+		aslider = $("#slider").aslider({
+			offset: {left: 0, top: 0}
+			, elem_offset: {left: 0, top: 0}
+		});
+		aslider.moveByIndex(0, 0);
+
+		changeActive();	// 選択状態にする丸印も再設定
+		return false;
+	});
+
+	// 2番目の要素を非表示にして生成
+	$("#create3").click(function () {
+		$("#slider ul").show();
+		$("#slider ul li").eq(1).hide();
+		$(".move").eq(1).hide();
+
+		aslider = $("#slider").aslider({
+			offset: {left: 0.5, top: 0.5}
+			, elem_offset: {left: -0.5, top: -0.5}
+		});
+		aslider.moveByIndex(0, 0);
+
+		changeActive();	// 選択状態にする丸印も再設定
+		return false;
+	});
+
+	// 3番目の要素を選択状態にして生成
+	$("#create4").click(function () {
+		$("#slider ul").show();
+		$("#slider ul li").show();
+		$(".move").show();
+
+		aslider = $("#slider").aslider({
+			offset: {left: 0.5, top: 0.5}
+			, elem_offset: {left: -0.5, top: -0.5}
+		});
+		aslider.moveByIndex(2, 0);	// 0始まりなので3番目の要素なら2にする
+
+		changeActive();	// 選択状態にする丸印も再設定
+		return false;
+	});
+
+	// スライドの各要素リンク
+	$("#slider li a").click(function() {
+		if (aslider == null) return false;
+
+		var move = aslider.moveByElem($(this).parent());
+		changeActive(move);
+		return false;
+	});
+
+	// 丸印リンク
+	$(".move").click(function () {
+		if (aslider == null) return false;
+
+		var index = $(".move:visible").index(this);
+		if (index < 0) return false;
+
+		var move = aslider.moveByIndex(index);
+		changeActive(move);
+		return false;
+	});
+
+	// 選択した丸印のclassを変更
+	function changeActive(move) {
+		var index = aslider.getPos(move).index;
+		$(".move").removeClass("active");
+		$(".move:visible").eq(index).addClass("active");
+	}
+
+	// スライド幅が固定ではないので変化したときに更新します
+	$(window).resize(function () {
+		aslider.init();
+	});
+
+});
+</script>
+</head>
+
+<body>
+<div id="header">
+	<div id="header_sub">
+		<div id="title" class="center">aslider</div>
+		<div id="title_sub"></div>
+	</div>
+</div>
+
+<div id="content">
+	<div class="content_sub center">
+		<h3>動的実行</h3>
+		<div id="slider_link">
+			<a id="create1" href="#">デフォルトの状態で生成</a><br>
+			<a id="create2" href="#">左上の位置にして生成</a><br>
+			<a id="create3" href="#">2番目の要素を非表示にして生成</a><br>
+			<a id="create4" href="#">3番目の要素を初期位置にして生成</a>
+		</div>
+		<div id="slider">
+			<ul>
+				<li><a href="#"><img src="img1.jpg" width="133" height="100"></a></li>
+				<li><a href="#"><img src="img2.jpg" width="133" height="100"></a></li>
+				<li><a href="#"><img src="img3.jpg" width="133" height="100"></a></li>
+				<li><a href="#"><img src="img4.jpg" width="133" height="100"></a></li>
+				<li><a href="#"><img src="img5.jpg" width="133" height="100"></a></li>
+				<li><a href="#"><img src="img6.jpg" width="133" height="100"></a></li>
+			</ul>
+		</div>
+		<div id="move_mark">
+			<a class="move" href="#">●</a>
+			<a class="move" href="#">●</a>
+			<a class="move" href="#">●</a>
+			<a class="move" href="#">●</a>
+			<a class="move" href="#">●</a>
+			<a class="move" href="#">●</a>
+		</div>
+
+		<div id="pad"></div>
+	</div>
+</div>
+</body>
+</html>

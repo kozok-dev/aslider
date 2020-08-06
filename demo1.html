@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width">
+<meta charset="utf-8">
+<title>aslider - 動作例</title>
+<link rel="stylesheet" href="style.css">
+<style>
+#slider {
+	width: 95%;
+	max-width: 800px;
+	height: 150px;
+	border: 1px solid #55a;
+	margin: 0 auto;
+	overflow: hidden;
+	box-shadow: 0px 0px 2px 2px rgba(0, 0, 0, 0.5);
+}
+#slider ul {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+
+	/* IE6ではサイズ自動取得に問題があるため動作対象外ですが、サイズを手動で指定すれば対策可能 */
+	_width: 999999px !important;
+}
+#slider li {
+	margin: 0px 5px;
+	padding: 0;
+	border: 3px solid #55a;
+	float: left;
+}
+
+#move_mark {
+	width: 95%;
+	max-width: 500px;
+	margin: 0 auto;
+	position: relative;
+	bottom: 0;
+}
+#move_mark a {
+	color: #666;
+	font-size: 20px;
+	font-weight: bold;
+	text-decoration: none;
+}
+#move_mark a.active, #move_mark a:hover {
+	color: #333;
+}
+#move_back {
+	margin: 0 10px;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+}
+#move_next {
+	margin: 0 10px;
+	position: absolute;
+	bottom: 0;
+	right: 0;
+}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="jquery.aslider.min.js"></script>
+<script>
+$(function () {
+	var aslider = $("#slider").aslider();
+
+	// 初期位置の丸印をactiveにする
+	changeActive();
+
+	// スライドの各要素リンク
+	$("#slider li a").click(function() {
+		if (aslider.isAnim()) return false;	// アニメーション中は実行しない
+
+		var move = aslider.moveByElem($(this).parent());
+		if (move == 0) {
+			alert("選択されている要素をクリックしました");
+		} else {
+			changeActive(move);
+		}
+		return false;
+	});
+
+	// 左矢印
+	$("#move_back").click(function () {
+		if (aslider.isAnim()) return false;	// アニメーション中は実行しない
+
+		var move = aslider.move(-1);
+		changeActive(move);
+		return false;
+	});
+
+	// 右矢印
+	$("#move_next").click(function () {
+		if (aslider.isAnim()) return false;	// アニメーション中は実行しない
+
+		var move = aslider.move(1);
+		changeActive(move);
+		return false;
+	});
+
+	// 丸印リンク
+	$(".move").click(function () {
+		if (aslider.isAnim()) return false;	// アニメーション中は実行しない
+
+		// 非表示項目を除外してindexを取得する
+		var index = $(".move:visible").index(this);
+		if (index < 0) return false;
+
+		var move = aslider.moveByIndex(index);
+		changeActive(move);
+		return false;
+	});
+
+	// 選択した丸印のclassを変更
+	function changeActive(move) {
+		var index = aslider.getPos(move).index;
+		$(".move").removeClass("active");
+		$(".move:visible").eq(index).addClass("active");	// 非表示項目を除外して設定
+
+		$("#index").text(index);
+
+		// スライドの各要素のstyleを変更
+		var obj = $("#slider ul li:visible");
+		obj.css({borderColor: ""});
+		obj.eq(index).css({borderColor: "#f00"});
+		obj.eq(index + aslider.count()).css({borderColor: "#f00"});	// コピー要素も同じ変更を行う
+	}
+
+	// スライド幅が固定ではないので変化したときに更新します
+	$(window).resize(function () {
+		aslider.init();
+	});
+
+});
+</script>
+</head>
+
+<body>
+<div id="header">
+	<div id="header_sub">
+		<div id="title" class="center">aslider</div>
+		<div id="title_sub"></div>
+	</div>
+</div>
+
+<div id="content">
+	<div class="content_sub center">
+		<h3>基本</h3>
+		<div id="slider">
+			<ul>
+				<li><a href="#"><img src="img1.jpg" width="133" height="100"></a></li>
+				<li><a href="#"><img src="img2.jpg" width="133" height="100"></a></li>
+				<li><a href="#"><img src="img3.jpg" width="133" height="100"></a></li>
+				<li><a href="#"><img src="img4.jpg" width="133" height="100"></a></li>
+				<li><a href="#"><img src="img5.jpg" width="133" height="100"></a></li>
+				<li><a href="#"><img src="img6.jpg" width="133" height="100"></a></li>
+				<li><a href="#"><img src="img7.jpg" width="133" height="100"></a></li>
+				<li><a href="#"><img src="img8.jpg" width="133" height="100"></a></li>
+				<li><a href="#"><img src="img9.jpg" width="133" height="100"></a></li>
+				<!-- 非表示要素は無視されます -->
+				<li style="display: none;"><a href="#"><img src="img1.jpg" width="133" height="100"></a></li>
+			</ul>
+			<!-- スライド化は1つ目の要素のみなので、2つ目以降の要素には任意の記述が可能 -->
+			<div id="index"></div>
+		</div>
+		<div id="move_mark">
+			<a class="move" href="#">●</a>
+			<a class="move" href="#">●</a>
+			<a class="move" href="#">●</a>
+			<a class="move" href="#">●</a>
+			<a class="move" href="#">●</a>
+			<a class="move" href="#">●</a>
+			<a class="move" href="#">●</a>
+			<a class="move" href="#">●</a>
+			<a class="move" href="#">●</a>
+			<a class="move" href="#" style="display: none;">●</a>
+			<div id="move_back"><a href="#">←</a></div>
+			<div id="move_next"><a href="#">→</a></div>
+		</div>
+
+		<div id="pad"></div>
+	</div>
+</div>
+</body>
+</html>
